@@ -1,0 +1,17 @@
+{
+  "name": "k8s",
+  "version": "1.0.0",
+  "description": "Kubernetes home lab.",
+  "license": "ISC",
+  "author": "Drew Holowaty",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "prod": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "serve-static": "^2.2.0"
+  }
+}
