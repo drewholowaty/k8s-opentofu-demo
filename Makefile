@@ -38,4 +38,4 @@ infra-deploy-azure: infra-install-azure
 infra-destroy-azure:
 	cd infra/azure && \
 	tofu destroy && \
-	az ad sp delete --id $(terraform output -raw sp)
+	az ad sp delete --id $(tofu output -raw sp)
