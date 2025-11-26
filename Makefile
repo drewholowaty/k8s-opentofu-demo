@@ -1,6 +1,8 @@
 # dev
 dev-deploy: localhost-prereqs server-publish-image-dev
 	kubectl apply -f server/dev-manifest.yml
+dev-destroy: localhost-destroy
+	kubectl delete -f server/dev-manifest.yml; \
 
 # sim-prod
 sim-prod-deploy: localhost-prereqs server-publish-image 
@@ -15,20 +17,23 @@ prod-destroy: infra-destroy-azure
 # localhost
 localhost-prereqs:
 	./scripts/localhost-prereqs.sh
+localhost-destroy:
+	minikube delete; \
+	podman stop "${HOSTNAME}-registry-c" | xargs podman rm
 
 # server
 server-install:
 	cd server && npm install
 server-publish-image-dev: server-install
 	cd server && \
-	docker build -t "localhost:5000/drewserver-server-i:latest" . && \
-	docker push "localhost:5000/drewserver-server-i:latest" 
+	podman build -t "localhost:5000/drewserver-server-i:latest" . && \
+	podman push --tls-verify=false "localhost:5000/drewserver-server-i:latest" 
 server-publish-image: server-install
 	cd server && \
-	docker build -t "drewserver-server-i:latest" . && \
-	docker tag "drewserver-server-i:latest" "drewholowaty/drewholowaty:drewserver-server-i" && \
-	docker login --username "drewholowaty" && \
-	docker push "drewholowaty/drewholowaty:drewserver-server-i"
+	podman build -t "drewserver-server-i:latest" . && \
+	podman tag "drewserver-server-i:latest" "drewholowaty/drewholowaty:drewserver-server-i" && \
+	podman login --username "drewholowaty" && \
+	podman push "drewholowaty/drewholowaty:drewserver-server-i"
 
 # infra
 infra-install-azure:

@@ -30,8 +30,8 @@ spec:
     spec:
       containers:
         - name: drewserver-server-c
-          imagePullPolicy: Never
-          image: "localhost:5000/drewserver-server-i"
+          imagePullPolicy: IfNotPresent
+          image: "host.minikube.internal:5000/drewserver-server-i:latest"
           ports:
             - containerPort: 3000
 ...
