@@ -2,6 +2,7 @@
 
 ## development
 ### Required Software
+- [uv](https://docs.astral.sh/uv/reference/installer/)
 - Podman
 - Minikube
 - Kubectl

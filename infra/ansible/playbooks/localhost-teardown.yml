@@ -1,0 +1,14 @@
+---
+- hosts: localhost
+  connection: local
+
+  tasks:
+    - name: Delete minikube
+      ansible.builtin.shell:
+        cmd: minikube delete
+
+    - name: Stop container registry
+      ansible.builtin.shell:
+        cmd: podman stop "$HOSTNAME-registry-c" | xargs podman rm
+
+...

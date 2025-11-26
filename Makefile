@@ -1,25 +1,27 @@
 # dev
-dev-deploy: localhost-prereqs server-publish-image-dev
+dev-deploy: localhost-setup server-publish-image-dev
 	kubectl apply -f server/dev-manifest.yml
-dev-destroy: localhost-destroy
-	kubectl delete -f server/dev-manifest.yml; \
+dev-destroy: localhost-teardown
 
 # sim-prod
-sim-prod-deploy: localhost-prereqs server-publish-image 
+sim-prod-deploy: localhost-prereqs server-publish-image-prod 
 	kubectl apply -f server/prod-manifest.yml
 
 # prod
-prod-deploy: server-publish-image infra-deploy-azure
+prod-deploy: server-publish-image-prod infra-deploy-azure
 # prod-stop: halts consuming resources such as webservers, microservices, etc
 # prod-start: starts prod resources after stop
 prod-destroy: infra-destroy-azure
 
 # localhost
-localhost-prereqs:
-	./scripts/localhost-prereqs.sh
-localhost-destroy:
-	minikube delete; \
-	podman stop "${HOSTNAME}-registry-c" | xargs podman rm
+localhost-setup:
+	cd infra/ansible/ && \
+	uv sync --upgrade && \
+	uv run ansible-playbook -K playbooks/localhost-setup.yml
+localhost-teardown:
+	cd infra/ansible/ && \
+	uv run ansible-playbook playbooks/localhost-teardown.yml
+
 
 # server
 server-install:
